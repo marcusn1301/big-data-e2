@@ -18,22 +18,23 @@ class ExampleProgram:
         # self.cursor.execute(query % table_name)
 
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS User (
-                            id INT AUTO_INCREMENT PRIMARY KEY,
+                            id CHAR(3) PRIMARY KEY,
                             has_labels BOOL NOT NULL)
                             ''')
         
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS Activity (
-                            id INT AUTO_INCREMENT PRIMARY KEY,
-                            user_id INT NOT NULL,
+                            id BIGINT NOT NULL,
+                            user_id CHAR(3) NOT NULL,
                             transportation_mode CHAR(10),
                             start_date_time DATETIME,
                             end_date_time DATETIME,
+                            PRIMARY KEY(id, user_id),
                             FOREIGN KEY (user_id) REFERENCES User(id))
                             ''') 
         
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS TrackPoint (
                             id INT AUTO_INCREMENT PRIMARY KEY,
-                            activity_id INT NOT NULL,
+                            activity_id BIGINT NOT NULL,
                             lat DOUBLE NOT NULL,
                             lon DOUBLE NOT NULL,
                             altitude INT NOT NULL,
@@ -45,8 +46,35 @@ class ExampleProgram:
         self.db_connection.commit()
 
     def insert_data(self):
+
+        labeled_ids = []
+
+        with open(f'./dataset/labeled_ids.txt') as labeled_ids_file:
+            lines = labeled_ids_file.read().splitlines()
+            labeled_ids += list(map(lambda l: int(l), lines))
+        
         for userID in filter(lambda u: u.isnumeric(), os.listdir('./dataset/Data')):
-            self.cursor.execute(f'INSERT IGNORE INTO User VALUES ({int(userID)}, FALSE)') #TODO: FIX FALSE VERDIEN HER
+            hasLabel = int(userID) in labeled_ids
+            
+            # print('Inserting user', userID)
+            
+            self.cursor.execute(f'INSERT INTO User VALUES ({int(userID)}, {hasLabel})')
+
+            # self.runQuery('SELECT * FROM Activity WHERE id=20081122143235', read=True)
+
+            labels = []
+
+            if hasLabel:
+                with open(f'./dataset/Data/{userID}/labels.txt') as labelsFile:
+                    lines = labelsFile.read().splitlines()[1:]
+
+                    for line in lines:
+                        words = line.split()
+
+                        words[0] = words[0].replace('/', '-')
+                        words[2] = words[2].replace('/', '-')
+
+                        labels.append([' '.join(words[:2]), ' '.join(words[2:4]), words[4]])
 
             for activityID in map(lambda f: f.split('.')[0], os.listdir(f'./dataset/Data/{userID}/Trajectory')):
                 with open(f'./dataset/Data/{userID}/Trajectory/{activityID}.plt') as pltFile:
@@ -58,8 +86,16 @@ class ExampleProgram:
 
                     startDateTime = ' '.join(lines[0].split(',')[-2:])
                     endDateTime = ' '.join(lines[-1].split(',')[-2:])
-                    self.cursor.execute(f'''INSERT IGNORE INTO Activity VALUES 
-                                        ({int(activityID)}, {int(userID)}, '', '{startDateTime}', '{endDateTime}')''') 
+
+                    transportationMode = ''
+
+                    for label in labels:
+                        if label[0] == startDateTime and label[1] == endDateTime:
+                            transportationMode = label[2]
+                            break
+
+                    self.cursor.execute(f'''INSERT INTO Activity VALUES 
+                                        ({int(activityID)}, {int(userID)}, '{transportationMode}', '{startDateTime}', '{endDateTime}')''') 
 
                     # Sekvensiell insertion:
                     # for i, line in enumerate(lines):
@@ -70,7 +106,7 @@ class ExampleProgram:
                     #         print(i)
 
                     # Batch insertion (MYE RASKERE):
-                    query = 'INSERT IGNORE INTO TrackPoint (activity_id, lat, lon, altitude, date_days, date_time) VALUES'
+                    query = 'INSERT INTO TrackPoint (activity_id, lat, lon, altitude, date_days, date_time) VALUES'
                     for line in lines:
                         if query.endswith(')'):
                             query += ','
@@ -82,6 +118,15 @@ class ExampleProgram:
             print(f'Inserted user {userID}')
 
         self.db_connection.commit()
+
+    def runQuery(self, query, read=False):
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        self.db_connection.commit()
+
+        if read:
+            print(rows)
+
 
     def fetch_data(self, table_name):
         query = "SELECT * FROM %s"
@@ -97,7 +142,12 @@ class ExampleProgram:
     def drop_table(self, table_name):
         print("Dropping table %s..." % table_name)
         query = "DROP TABLE %s"
+
+        print(query % table_name)
+
         self.cursor.execute(query % table_name)
+
+        self.db_connection.commit()
 
     def show_tables(self):
         self.cursor.execute("SHOW TABLES")
@@ -109,11 +159,38 @@ def main():
     program = None
     try:
         program = ExampleProgram()
-        program.create_table()
-        program.insert_data()
-        # _ = program.fetch_data(table_name="Person")
+
+        # program.drop_table('TrackPoint')
+        # program.drop_table('Activity')
+        # program.drop_table('User')
+
+        # program.show_tables()
+
+        # program.create_table()
+        # program.insert_data()
+        # _ = program.fetch_data(table_name="User")
         # program.drop_table(table_name="TrackPoint")
         # # Check that the table is dropped
+
+        program.runQuery('SELECT COUNT(id) FROM User;', read=True)
+        program.runQuery('SELECT COUNT(id) FROM Activity;', read=True)
+        program.runQuery('SELECT COUNT(id) FROM TrackPoint;', read=True)
+        # [(182,)]
+        # [(16048,)]
+        # [(9681756,)]
+
+        program.runQuery('''
+SELECT AVG(u.tCount) FROM 
+(SELECT COUNT(TrackPoint.id) as tCount
+FROM User
+INNER JOIN Activity ON Activity.user_id=User.id
+INNER JOIN TrackPoint ON TrackPoint.activity_id=Activity.id
+GROUP BY User.id) u''', read=True)
+        # 61350.0000 men det kan ikke stemme???
+        # Altså, avg av count trackpoint pr user for alle users, må være lik count trackpoint/users,
+        # mens dette er 15% høyere...
+
+
         program.show_tables()
     except Exception as e:
         print("ERROR: Failed to use database:", e)
