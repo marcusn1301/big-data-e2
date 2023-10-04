@@ -218,11 +218,17 @@ def main():
         #Find top 15 users who have the largest number of activities.
         
         #TODO activities i stedet for trackpoints
-        # print('Task 3')
-        # program.runQuery('''
-        # SELECT uId, aCount FROM
-        # (SELECT User.id as uID, COUNT(Activity.id) as aCount
-        #  ''')
+        print('Task 3')
+        #Find the top 15 users with the highest number of activities.
+        program.runQuery('''
+        SELECT uId, aCount FROM
+        (SELECT User.id as uID, COUNT(Activity.id) as aCount
+        FROM User
+        INNER JOIN Activity ON Activity.user_id=User.id
+        GROUP BY User.id) u
+        ORDER BY aCount DESC
+        LIMIT 15
+         ''', read=True)
                 
         
         # print('Task 4')
