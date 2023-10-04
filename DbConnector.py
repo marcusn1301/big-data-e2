@@ -1,4 +1,8 @@
 import mysql.connector as mysql
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 
 
 class DbConnector:
@@ -18,7 +22,7 @@ class DbConnector:
                  HOST="tdt4225-20.idi.ntnu.no",
                  DATABASE="exercise_db",
                  USER="marcussn",
-                 PASSWORD="stordata"):
+                 PASSWORD=os.getenv("PASSWORD"),):
         # Connect to the database
         try:
             self.db_connection = mysql.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD, port=3306)

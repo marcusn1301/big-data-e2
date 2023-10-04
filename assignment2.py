@@ -215,20 +215,17 @@ def main():
         # ORDER BY tCount DESC LIMIT 15''', read=True)
         # [('128', 1010325), ('153', 957841), ('25', 433501), ('163', 332364), ('41', 318169), ('68', 289605), ('4', 263603), ('62', 263455), ('85', 259612), ('17', 230085), ('14', 213801), ('3', 210728), ('144', 210031), ('167', 204842), ('30', 182984)]
         
-        #Find top 15 users who have the largest number of activities.
-        
-        #TODO activities i stedet for trackpoints
-        print('Task 3')
-        #Find the top 15 users with the highest number of activities.
-        program.runQuery('''
-        SELECT uId, aCount FROM
-        (SELECT User.id as uID, COUNT(Activity.id) as aCount
-        FROM User
-        INNER JOIN Activity ON Activity.user_id=User.id
-        GROUP BY User.id) u
-        ORDER BY aCount DESC
-        LIMIT 15
-         ''', read=True)
+        #Endret til activities
+        # print('Task 3')
+        # program.runQuery('''
+        # SELECT uId, aCount FROM
+        # (SELECT User.id as uID, COUNT(Activity.id) as aCount
+        # FROM User
+        # INNER JOIN Activity ON Activity.user_id=User.id
+        # GROUP BY User.id) u
+        # ORDER BY aCount DESC
+        # LIMIT 15
+        #  ''', read=True)
                 
         
         # print('Task 4')
