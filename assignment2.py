@@ -204,7 +204,6 @@ def main():
         # GROUP BY User.id) u''', read=True)
         # [(Decimal('53196.4615'), 0, 1010325)]
         
-        #ENDRE til activities
         # print('Task 3')
         # program.runQuery('''
         # SELECT uId, tCount FROM 
@@ -215,6 +214,16 @@ def main():
         # GROUP BY User.id) u
         # ORDER BY tCount DESC LIMIT 15''', read=True)
         # [('128', 1010325), ('153', 957841), ('25', 433501), ('163', 332364), ('41', 318169), ('68', 289605), ('4', 263603), ('62', 263455), ('85', 259612), ('17', 230085), ('14', 213801), ('3', 210728), ('144', 210031), ('167', 204842), ('30', 182984)]
+        
+        #Find top 15 users who have the largest number of activities.
+        
+        #TODO activities i stedet for trackpoints
+        # print('Task 3')
+        # program.runQuery('''
+        # SELECT uId, aCount FROM
+        # (SELECT User.id as uID, COUNT(Activity.id) as aCount
+        #  ''')
+                
         
         # print('Task 4')
         # program.runQuery('''
@@ -394,6 +403,7 @@ def main():
         # AND tp2.altitude > tp1.altitude
         # GROUP BY tp1.user_id
         # ORDER BY altitudeGained DESC
+        # LIMIT 15
         # ''', read=True)
 
         # Dette returne ett 1:30: [('128', Decimal('650886.6840')), ('153', Decimal('554969.4768')), ('4', Decimal('332036.3184')), ('41', Decimal('240758.4720')), ('3', Decimal('233663.6424')), ('85', Decimal('217642.1352')), ('163', Decimal('205264.2072')), ('62', Decimal('181692.1944')), ('144', Decimal('179457.4008')), ('30', Decimal('175679.7096')), ('39', Decimal('146703.5928')), ('84', Decimal('131161.2312')), ('0', Decimal('121504.8624')), ('2', Decimal('115062.9144')), ('167', Decimal('112973.2056')), ('25', Decimal('109148.2704')), ('37', Decimal('99220.9344')), ('140', Decimal('94838.8248')), ('126', Decimal('83024.1672')), ('17', Decimal('62566.2960')), ('34', Decimal('61439.7552')), ('42', Decimal('61319.9688')), ('7', Decimal('60795.7128')), ('22', Decimal('60501.2760')), ('14', Decimal('60148.9272')), ('28', Decimal('54018.1800')), ('13', Decimal('50588.2656')), ('44', Decimal('48724.7184')), ('96', Decimal('46660.9176')), ('12', Decimal('46044.9168')), ('15', Decimal('45139.6608')), ('115', Decimal('44387.7192')), ('24', Decimal('44334.9888')), ('5', Decimal('43074.9456')), ('1', Decimal('39407.8968')), ('38', Decimal('39378.0264')), ('147', Decimal('37626.6456')), ('168', Decimal('36481.5120')), ('52', Decimal('34431.4272')), ('92', Decimal('34126.0176')), ('36', Decimal('32947.9656')), ('10', Decimal('32046.6720')), ('35', Decimal('31818.3768')), ('111', Decimal('31468.4664')), ('82', Decimal('31018.5816')), ('18', Decimal('30794.5536')), ('142', Decimal('30720.7920')), ('125', Decimal('30628.7424')), ('6', Decimal('29157.4728')), ('9', Decimal('28905.7080')), ('179', Decimal('26642.2632')), ('43', Decimal('26583.7416')), ('16', Decimal('25181.6616')), ('174', Decimal('24049.0248')), ('11', Decimal('22850.8560')), ('65', Decimal('22450.0440')), ('29', Decimal('22343.6688')), ('155', Decimal('22213.8240')), ('40', Decimal('22142.5008')), ('106', Decimal('20019.8736')), ('119', Decimal('18733.6176')), ('8', Decimal('17861.5848')), ('23', Decimal('17020.3368')), ('46', Decimal('16948.7088')), ('32', Decimal('15471.3432')), ('26', Decimal('15382.6464')), ('61', Decimal('15197.0232')), ('78', Decimal('15108.9360')), ('67', Decimal('13314.5784')), ('19', Decimal('13179.2472')), ('101', Decimal('13112.1912')), ('81', Decimal('11222.4312')), ('169', Decimal('11121.8472')), ('130', Decimal('9487.2048')), ('112', Decimal('9207.3984')), ('113', Decimal('8978.1888')), ('64', Decimal('8777.0208')), ('105', Decimal('8756.9040')), ('63', Decimal('7837.9320')), ('158', Decimal('7617.2568')), ('73', Decimal('7563.0024')), ('150', Decimal('7371.8928')), ('57', Decimal('7371.8928')), ('94', Decimal('7371.8928')), ('134', Decimal('7039.3560')), ('89', Decimal('6906.4632')), ('122', Decimal('6114.8976')), ('99', Decimal('5948.1720')), ('138', Decimal('5935.0656')), ('123', Decimal('5926.2264')), ('79', Decimal('5824.7280')), ('88', Decimal('5382.4632')), ('145', Decimal('5202.6312')), ('139', Decimal('5097.4752')), ('121', Decimal('4993.2336')), ('21', Decimal('4495.1904')), ('157', Decimal('4481.4744')), ('135', Decimal('4404.0552')), ('50', Decimal('4403.7504')), ('172', Decimal('4291.8888')), ('166', Decimal('4256.8368')), ('181', Decimal('4207.4592')), ('154', Decimal('4163.5680')), ('118', Decimal('3935.8824')), ('95', Decimal('3819.7536')), ('103', Decimal('3692.9568')), ('136', Decimal('3489.6552')), ('70', Decimal('3375.9648')), ('56', Decimal('3192.4752')), ('55', Decimal('3107.7408')), ('97', Decimal('2777.0328')), ('33', Decimal('2763.6216')), ('108', Decimal('2742.8952')), ('161', Decimal('2709.0624')), ('124', Decimal('2585.0088')), ('45', Decimal('2537.4600')), ('176', Decimal('2515.5144')), ('98', Decimal('2420.7216')), ('170', Decimal('2314.6512')), ('127', Decimal('2075.9928')), ('77', Decimal('2043.0744')), ('164', Decimal('1986.0768')), ('58', Decimal('1939.1376')), ('129', Decimal('1836.1152')), ('175', Decimal('1826.3616')), ('27', Decimal('1724.5584')), ('47', Decimal('1717.2432')), ('100', Decimal('1558.1376')), ('69', Decimal('1508.7600')), ('80', Decimal('1502.3592')), ('76', Decimal('1489.2528')), ('54', Decimal('1404.2136')), ('146', Decimal('1364.8944')), ('152', Decimal('1317.6504')), ('107', Decimal('1306.9824')), ('86', Decimal('1112.8248')), ('75', Decimal('1112.2152')), ('162', Decimal('1093.6224')), ('91', Decimal('1082.3448')), ('53', Decimal('1009.8024')), ('66', Decimal('971.0928')), ('171', Decimal('910.4376')), ('117', Decimal('736.7016')), ('90', Decimal('729.3864')), ('151', Decimal('716.5848')), ('116', Decimal('586.1304')), ('31', Decimal('569.9760')), ('87', Decimal('397.4592')), ('114', Decimal('395.3256')), ('72', Decimal('360.5784')), ('48', Decimal('360.2736')), ('180', Decimal('333.7560')), ('60', Decimal('320.0400')), ('133', Decimal('301.4472')), ('93', Decimal('285.5976')), ('178', Decimal('22.8600'))]
@@ -403,19 +413,19 @@ def main():
         print('Task 10')
         # Find the users that have traveled the longest total distance in one day for each
         # transportation mode.
-        program.runQuery('''
-        SELECT 
-            Activity.user_id, Activity.transportation_mode, TIMEDIFF(Activity.end_date_time, Activity.start_date_time)
-        FROM
-            Activity
-        INNER JOIN 
-            TrackPoint 
-        ON 
-            TrackPoint.activity_id = Activity.id AND TrackPoint.user_id = Activity.user_id
-        WHERE 
-            DATE(start_date_time) = DATE(end_date_time) AND transportation_mode != ''
-        LIMIT 10
-        ''', read=True)
+        # program.runQuery('''
+        # SELECT 
+        #     Activity.user_id, Activity.transportation_mode, TIMEDIFF(Activity.end_date_time, Activity.start_date_time)
+        # FROM
+        #     Activity
+        # INNER JOIN 
+        #     TrackPoint 
+        # ON 
+        #     TrackPoint.activity_id = Activity.id AND TrackPoint.user_id = Activity.user_id
+        # WHERE 
+        #     DATE(start_date_time) = DATE(end_date_time) AND transportation_mode != ''
+        # LIMIT 10
+        # ''', read=True)
 
         # print('Task 12')
 
