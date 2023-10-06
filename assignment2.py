@@ -322,118 +322,53 @@ def main():
 
         print(tabulate(result, headers=['User ID', 'Transportation mode', 'Duration'], tablefmt='psql'))"""
 
-        # Resultatet her e 962 activities, se google docs
 
-        # print('Task 8')
-        # # Dette hadde gitt svaret om det var snakk om trackpoints, men det blir alt for mye.
-        # # for i in range(1000):
-        # #     print(i)
-        # #     program.runQuery(f'''
-        # #     SELECT tp1.user_id, tp2.user_id
-        # #     FROM TrackPoint AS tp1
-        # #     CROSS JOIN TrackPoint as tp2
-        # #     WHERE ABS(TIMESTAMPDIFF(SECOND, tp2.date_time, tp1.date_time)) <= 30 AND
-        # #     ABS(tp1.lat-tp2.lat) * 10000000 / 90 < 50 AND 
-        # #     ABS(tp1.lon-tp2.lon) * 10000000 / 90 < 50 AND
-        # #     tp1.user_id != tp2.user_id
-        # #     LIMIT 10 OFFSET {i*10}
-        # #     ''', read=True)
-        # #     # , ABS(TIMESTAMPDIFF(SECOND, tp2.date_time, tp1.date_time)), ABS(tp1.lat-tp2.lat) * 1000000 / 90, ABS(tp1.lon-tp2.lon) * 1000000 / 90
-        
-        # # for userID in program.runQuery('SELECT * FROM User', rtrn=True):
-        # #     program.runQuery(f'''
-        # #     SELECT tp1.user_id, tp2.user_id
-        # #     FROM TrackPoint AS tp1
-        # #     CROSS JOIN TrackPoint as tp2
-        # #     WHERE ABS(TIMESTAMPDIFF(SECOND, tp2.date_time, tp1.date_time)) <= 30 AND
-        # #     ABS(tp1.lat-tp2.lat) * 10000 / 90 < 50 AND 
-        # #     ABS(tp1.lon-tp2.lon) * 10000 / 90 < 50 AND
-        # #     tp1.user_id != tp2.user_id
-        # #     LIMIT 100
-        # #     ''', read=True)
-
-        # # users = program.runQuery('SELECT * FROM User', rtrn=True)
-
-        # # userIDs = list(map(lambda u: u[0], users))
-
-
-        # uids = list(map(lambda u: u[0], program.runQuery('SELECT id from User', rtrn=True)))
-        # closeUsers = []
-        # uToTrackPoints = {}
-        # for uid in uids:
-        #     print('u1:', uid)
-        #     tps = program.runQuery(f'SELECT lat, lon, date_time FROM TrackPoint WHERE user_id = {uid}', rtrn=True)
+        """print('Task 8')
+        uids = list(map(lambda u: u[0], program.runQuery('SELECT id from User', rtrn=True)))
+        closeUsers = []
+        uToTrackPoints = {}
+        for uid in uids:
+            print('u1:', uid)
+            tps = program.runQuery(f'SELECT lat, lon, date_time FROM TrackPoint WHERE user_id = {uid}', rtrn=True)
             
-        #     # Convert tps to a nicer format
-        #     tps = list(map(lambda tp: (tp[0], tp[1], int(tp[2].timestamp())), tps))
+            # Convert tps to a nicer format
+            tps = list(map(lambda tp: (tp[0], tp[1], int(tp[2].timestamp())), tps))
 
-        #     print('Reformatted', uid)
+            print('Reformatted', uid)
 
-        #     for uid2, tsToTPs in uToTrackPoints.items():
-        #         print('u2:', uid2)
+            for uid2, tsToTPs in uToTrackPoints.items():
+                print('u2:', uid2)
                 
-        #         for tp in tps:
-        #             listOfTPs = tsToTPs.get(int(tp[2]//30)-1, []) + \
-        #                         tsToTPs.get(int(tp[2]//30), []) + \
-        #                         tsToTPs.get(int(tp[2]//30)+1, [])
+                for tp in tps:
+                    listOfTPs = tsToTPs.get(int(tp[2]//30)-1, []) + \
+                                tsToTPs.get(int(tp[2]//30), []) + \
+                                tsToTPs.get(int(tp[2]//30)+1, [])
                     
-        #             if any(map(lambda tp2: abs(tp2[2] - tp[2]) <= 30 and haversine((tp[0], tp[1]), (tp2[0], tp2[1])) <= 50, listOfTPs)):
-        #                 print('FoundMatch', uid, uid2)
-        #                 closeUsers.append(uid)
-        #                 closeUsers.append(uid2)
-        #                 del uToTrackPoints[uid2]
-        #                 break
+                    if any(map(lambda tp2: abs(tp2[2] - tp[2]) <= 30 and haversine((tp[0], tp[1]), (tp2[0], tp2[1])) <= 50, listOfTPs)):
+                        print('FoundMatch', uid, uid2)
+                        closeUsers.append(uid)
+                        closeUsers.append(uid2)
+                        del uToTrackPoints[uid2]
+                        break
 
-        #             if uid2 in closeUsers:
-        #                 break
+                    if uid2 in closeUsers:
+                        break
 
-        #         if uid in closeUsers:
-        #             break
+                if uid in closeUsers:
+                    break
             
-        #     if uid not in closeUsers:
-        #         uToTrackPoints[uid] = {}
+            if uid not in closeUsers:
+                uToTrackPoints[uid] = {}
 
-        #         for tp in tps:
-        #             if int(tp[2]//30) in uToTrackPoints[uid]:
-        #                 uToTrackPoints[uid][int(tp[2]//30)].append(tp)
-        #             else:
-        #                 uToTrackPoints[uid][int(tp[2]//30)] = [tp]
-        # print('CloseUsers:', closeUsers)
-        # Det returna etter 22 min: ['1', '0', '103', '10', '104', '101', '106', '105', '108', '107', '110', '109', '114', '113', '115', '111', '116', '100', '119', '11', '125', '112', '126', '12', '128', '117', '13', '124', '130', '122', '14', '135', '140', '134', '144', '127', '150', '146', '151', '121', '153', '102', '155', '131', '158', '15', '16', '142', '162', '157', '163', '129', '167', '136', '174', '164', '179', '17', '19', '18', '20', '165', '22', '2', '24', '23', '26', '25', '29', '27', '3', '28', '34', '30', '36', '35', '37', '32', '39', '38', '4', '33', '41', '40', '43', '42', '46', '169', '5', '44', '51', '173', '52', '152', '55', '168', '56', '175', '57', '47', '58', '138', '62', '176', '67', '45', '68', '54', '69', '145', '7', '6', '71', '159', '73', '64', '76', '161', '78', '170', '84', '66', '85', '53', '88', '70', '89', '166', '9', '8', '91', '181', '92', '81', '93', '82', '94', '61']
-
-
-        # # program.runQuery('''
-        # # SELECT DISTINCT tp1.user_id
-        # # FROM User AS u
-        # # WHERE EXISTS (SELECT 1
-        # #     FROM TrackPoint as tp1
-        # #     CROSS JOIN TrackPoint as tp2
-        # #     ON tp1.user_id != tp2.user_id
-        # #     WHERE tp1.user_id = u.id AND
-        # #     ABS(TIMESTAMPDIFF(SECOND, tp2.date_time, tp1.date_time)) <= 30 AND
-        # #     ABS(tp1.lat-tp2.lat) < 0.00045 AND 
-        # #     ABS(tp1.lon-tp2.lon) < 0.00045
-        # # )
-        # # ''', read=True)
-
-        # # program.runQuery('''
-        # # SELECT tp1.user_id
-        # # FROM TrackPoint AS tp1
-        # # CROSS JOIN TrackPoint as tp2
-        # # WHERE tp1.user_id != tp2.user_id AND 
-        # # ABS(TIMESTAMPDIFF(SECOND, tp2.date_time, tp1.date_time)) <= 30 AND
-        # # ABS(tp1.lat-tp2.lat) * 10000000 / 90 < 50 AND 
-        # # ABS(tp1.lon-tp2.lon) * 10000000 / 90 < 50
-        # # GROUP BY tp1.user_id
-        # # LIMIT 100
-        # # ''', read=True)
-
-
-        # #  DATE(start_date_time) < DATE(end_date_time) 
-        # #  AND DATEDIFF(end_date_time, start_date_time) = 1
-
-        # # INNER JOIN Activity ON Activity.user_id = User.id
-        # # INNER JOIN TrackPoint ON TrackPoint.activity_id = Activity.id AND TrackPoint.user_id = Activity.user_id
+                for tp in tps:
+                    if int(tp[2]//30) in uToTrackPoints[uid]:
+                        uToTrackPoints[uid][int(tp[2]//30)].append(tp)
+                    else:
+                        uToTrackPoints[uid][int(tp[2]//30)] = [tp]
+                        
+        result = program.runQuery('SELECT COUNT(DISTINCT user_id) FROM TrackPoint WHERE user_id IN (' + ','.join(map(str, closeUsers)) + ')', rtrn=True)[0][0]
+        result_list = [(result,)]  # Create a list with a single tuple containing the result
+        print(tabulate(result_list, headers=['Number of close users'], tablefmt='psql'))"""
 
         # # Vi kan bruk manhattan distance på db nivå og haversine på python nivå
 
@@ -456,10 +391,10 @@ def main():
 
         # Queryet forutsette at TrackPoint alltid settes inn i rett rekkefølge, som vi tror er en fornuftig anntakelse. 
         
-        """print('Task 10')
+        print('Task 10')
         # Find the users that have traveled the longest total distance in one day for each
         # transportation mode.
-        program.runQuery('''
+        result = program.runQuery('''
         SELECT 
             Activity.user_id, Activity.transportation_mode, TIMEDIFF(Activity.end_date_time, Activity.start_date_time)
         FROM
@@ -471,7 +406,8 @@ def main():
         WHERE 
             DATE(start_date_time) = DATE(end_date_time) AND transportation_mode != ''
         LIMIT 10
-        ''', read=True)"""
+        ''', read=True)
+        print(tabulate(result, headers=['User ID', 'Transportation mode', 'Duration'], tablefmt='psql'))
 
 
 

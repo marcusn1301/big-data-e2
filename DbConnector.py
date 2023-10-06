@@ -1,5 +1,6 @@
 import mysql.connector as mysql
-
+import os
+from dotenv import load_dotenv
 
 class DbConnector:
     """
@@ -13,12 +14,14 @@ class DbConnector:
     USER = "testuser" // This is the user you created and added privileges for
     PASSWORD = "test123" // The password you set for said user
     """
+    
+    print("passord: ", os.getenv("PASSWORD"))
 
     def __init__(self,
                  HOST="tdt4225-20.idi.ntnu.no",
                  DATABASE="exercise_db",
                  USER="marcussn",
-                 PASSWORD="stordata"):
+                 PASSWORD=os.getenv("PASSWORD"),):
         # Connect to the database
         try:
             self.db_connection = mysql.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD, port=3306)
