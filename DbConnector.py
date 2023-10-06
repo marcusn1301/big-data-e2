@@ -2,6 +2,8 @@ import mysql.connector as mysql
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 class DbConnector:
     """
     Connects to the MySQL server on the Ubuntu virtual machine.
@@ -14,8 +16,6 @@ class DbConnector:
     USER = "testuser" // This is the user you created and added privileges for
     PASSWORD = "test123" // The password you set for said user
     """
-    
-    print("passord: ", os.getenv("PASSWORD"))
 
     def __init__(self,
                  HOST="tdt4225-20.idi.ntnu.no",
