@@ -243,8 +243,7 @@ def main():
         GROUP BY User.id) u
         ORDER BY aCount DESC
         LIMIT 15
-         ''', read=True)"""
-                
+         ''', read=True)"""  
         
         # print('Task 4')
         """result = program.runQuery('''
@@ -499,10 +498,6 @@ def main():
             subquery.user_id;
         ''', read=True)))"""
 
-
-
-
-        
         # program.runQuery('''
         # SELECT 
         #     Activity.user_id, Activity.transportation_mode, TIMEDIFF(Activity.end_date_time, Activity.start_date_time)
