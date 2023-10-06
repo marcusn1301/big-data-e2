@@ -429,6 +429,21 @@ def main():
         #     DATE(start_date_time) = DATE(end_date_time) AND transportation_mode != ''
         # LIMIT 10
         # ''', read=True)
+        
+        # program.runQuery('''
+        # SELECT 
+        #     Activity.user_id, Activity.transportation_mode, TIMEDIFF(Activity.end_date_time, Activity.start_date_time)
+        # FROM
+        #     SELECT (
+        # INNER JOIN 
+        #     TrackPoint 
+        # ON 
+        #     TrackPoint.activity_id = Activity.id AND TrackPoint.user_id = Activity.user_id
+        # WHERE 
+        #     DATE(start_date_time) = DATE(end_date_time) AND transportation_mode != ''
+        # GROUP BY Activity.id)
+        # LIMIT 10
+        # ''', read=True)
 
         # print('Task 12')
 
